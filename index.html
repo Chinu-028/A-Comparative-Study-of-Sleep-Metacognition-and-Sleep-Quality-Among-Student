@@ -1,12 +1,9 @@
 <!DOCTYPE html>
-
 <html>
 <head>
 <meta charset="UTF-8">
 <title>IASMHS Survey</title>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <style>
 body{font-family:Arial;background:#eef2f5;padding:40px;}
 .container{background:white;padding:25px;max-width:800px;margin:auto;border-radius:10px;}
@@ -14,15 +11,11 @@ body{font-family:Arial;background:#eef2f5;padding:40px;}
 .scale label{margin-right:10px;}
 button{margin-top:30px;padding:12px 20px;background:#2e7d32;color:white;border:none;border-radius:6px;}
 </style>
-
 </head>
-
 <body>
 <div class="container">
 <h2>Attitudes Toward Seeking Mental Health Services</h2>
-
 <h3>Participant Details</h3>
-
 <label>Sex:</label>
 <select id="sex">
   <option value="">Select</option>
@@ -31,11 +24,9 @@ button{margin-top:30px;padding:12px 20px;background:#2e7d32;color:white;border:n
   <option>Other</option>
 </select>
 <br><br>
-
 <label>Age:</label>
 <input type="number" id="age">
 <br><br>
-
 <label>Area:</label>
 <select id="area">
   <option value="">Select</option>
@@ -43,16 +34,12 @@ button{margin-top:30px;padding:12px 20px;background:#2e7d32;color:white;border:n
   <option>Semi Urban</option>
   <option>Rural</option>
 </select>
-
 <hr>
  
 <p><b>Consent:</b> Anonymous academic research. Please answer honestly.</p>
 <p>0=Disagree | 1=Somewhat Disagree | 2=Undecided | 3=Somewhat Agree | 4=Agree</p>
-
 <div id="questions"></div>
-
 <button onclick="submitForm()">Submit & Download PDF</button>
-
 <p id="msg"></p>
 </div>
  
@@ -83,7 +70,6 @@ const items = [
 "Had I received treatment for psychological problems, I would not feel that it ought to be “covered up.",
 "I would be embarrassed if my neighbor saw me going into the office of a professional who deals with psychological problems."
 ];
-
 let html="";
 items.forEach((q,i)=>{
 html+=`<div class="question"><p>${i+1}. ${q}</p><div class="scale">`;
@@ -95,43 +81,32 @@ html+=`</div></div>`;
 document.getElementById("questions").innerHTML=html;
 
 async function submitForm(){
-
 let responses = {};
-
 // collect answers
 for(let i=0;i<24;i++){
 let val=document.querySelector('input[name="q'+i+'"]:checked');
 responses["Q"+(i+1)] = val ? val.value : "";
 }
-
 // send to google sheet
 await fetch("https://script.google.com/macros/s/AKfycbwM0YQSglMyPu1Sg0LGllXhYr4FLGrvR3MnHQiw00IITNblyySg-QvgnzNK_4GbeP7Z/exec", {
 method:"POST",
 headers: { "Content-Type": "application/json" },
 body: JSON.stringify(responses)
 });
-
 // create pdf
 const { jsPDF } = window.jspdf;
 const doc = new jsPDF();
-
 let y=10;
 doc.text("Mental Health Survey Response",10,y);
 y+=10;
-
 for(let key in responses){
 doc.text(key + " : " + responses[key],10,y);
 y+=8;
 if(y>280){ doc.addPage(); y=10;}
 }
-
 doc.save("Survey_Response.pdf");
-
 document.getElementById("msg").innerHTML="Submitted & PDF downloaded";
-
-});
-
-}</script>
-
+}
+</script>
 </body>
 </html>
