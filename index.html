@@ -30,30 +30,30 @@ button{margin-top:30px;padding:12px 20px;background:#2e7d32;color:white;border:n
 
 <script>
 const items = [
-"There are certain problems which should not be discussed outside one’s family.",
-"I would know who to talk to if I needed psychological help.",
-"I would not want my partner to know if I had psychological problems.",
-"Keeping busy helps avoid worries.",
-"I might recommend a friend see a professional.",
-"Mental illness carries shame.",
-"It is best not to know everything about oneself.",
-"Psychotherapy could relieve serious problems.",
-"Professional help should be last resort.",
-"I could get professional help if I wanted.",
-"Important people would think less of me.",
-"Problems usually work out themselves.",
-"I could find time to see a professional.",
-"I have experiences I would not discuss with anyone.",
-"I would want help if upset for long time.",
-"I’d feel uncomfortable because others might know.",
-"A diagnosis is a blot on life.",
-"Handling fears without help is admirable.",
-"I’d first seek professional attention.",
-"I’d feel uneasy about others’ opinions.",
-"Strong people solve problems alone.",
-"I would confide intimate matters to help.",
-"I wouldn’t hide receiving treatment.",
-"I’d be embarrassed seen entering clinic."
+"There are certain problems which should not be discussed outside of one‟s immediate family.",
+"I would have a very good idea of what to do and who to talk to if I decided to seek professional help for psychological problems.",
+"I would not want my significant other (spouse, partner, etc.) to know if I were suffering from psychological problems.",
+"Keeping one‟s mind on a job is a good solution for avoiding personal worries and concerns.",
+"If good friends asked my advice about a psychological problem, I might recommend that they see a professional.",
+"Having been mentally ill carries with it a burden of shame.",
+"It is probably best not to know everything about oneself.",
+"If I were experiencing a serious psychological problem at this point in my life, I would be confident that I could find relief in psychotherapy.",
+"People should work out their own problems; getting professional help should be a last resort.",
+"If I were to experience psychological problems, I could get professional help if I wanted to.",
+"Important people in my life would think less of me if they were to find out that I was experiencing psychological problems.",
+"Psychological problems, like many things, tend to work out by themselves.",
+"It would be relatively easy for me to find the time to see a professional for psychological problems.",
+"There are experiences in my life I would not discuss with anyone",
+"I would want to get professional help if I were worried or upset for a long period of time.",
+"I would be uncomfortable seeking professional help for psychological problems because people in my social or business circles might find out about it.",
+"Having been diagnosed with a mental disorder is a blot on a person‟s life.",
+"There is something admirable in the attitude of people who are willing to cope with their conflicts and fears without resorting to professional help.",
+"If I believed I were having a mental breakdown, my first inclination would be to get professional attention.",
+"I would feel uneasy going to a professional because of what some people would think.",
+"People with strong characters can get over psychological problems by themselves and would have little need for professional help.",
+"I would willingly confide intimate matters to an appropriate person if I thought it might help me or a member of my family.",
+"Had I received treatment for psychological problems, I would not feel that it ought to be “covered up.",
+"I would be embarrassed if my neighbor saw me going into the office of a professional who deals with psychological problems."
 ];
 
 let html="";
@@ -67,9 +67,23 @@ html+=`</div></div>`;
 document.getElementById("questions").innerHTML=html;
 
 function submitForm(){
-document.getElementById("msg").innerHTML="Thank you. Response recorded.";
+
+let responses = {};
+for(let i=0;i<24;i++){
+let val=document.querySelector('input[name="q'+i+'"]:checked');
+responses["Q"+(i+1)] = val ? val.value : "";
 }
-</script>
+
+fetch("https://script.google.com/macros/s/AKfycbyLjTq8jSHgVtY15CAJ19txCfqc7adWfTbdNRx5cs__A0Fb2DWm1zYFHDHuceruY4Ue/exec", {
+method:"POST",
+body:JSON.stringify(responses)
+})
+.then(res=>res.text())
+.then(data=>{
+document.getElementById("msg").innerHTML="Thank you. Your response has been saved.";
+});
+
+}</script>
 
 </body>
 </html>
