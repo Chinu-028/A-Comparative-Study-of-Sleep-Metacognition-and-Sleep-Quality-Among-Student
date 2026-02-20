@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<title>IASMHS Survey</title>
+
+<style>
+body{font-family:Arial;background:#eef2f5;padding:40px;}
+.container{background:white;padding:25px;max-width:800px;margin:auto;border-radius:10px;}
+.question{margin-top:18px;}
+.scale label{margin-right:10px;}
+button{margin-top:30px;padding:12px 20px;background:#2e7d32;color:white;border:none;border-radius:6px;}
+</style>
+
+</head>
+
+<body>
+<div class="container">
+<h2>Attitudes Toward Seeking Mental Health Services</h2>
+<p><b>Consent:</b> Anonymous academic research. Please answer honestly.</p>
+<p>0=Disagree | 1=Somewhat Disagree | 2=Undecided | 3=Somewhat Agree | 4=Agree</p>
+
+<div id="questions"></div>
+
+<button onclick="submitForm()">Submit</button>
+
+<p id="msg"></p>
+</div>
+
+<script>
+const items = [
+"There are certain problems which should not be discussed outside one’s family.",
+"I would know who to talk to if I needed psychological help.",
+"I would not want my partner to know if I had psychological problems.",
+"Keeping busy helps avoid worries.",
+"I might recommend a friend see a professional.",
+"Mental illness carries shame.",
+"It is best not to know everything about oneself.",
+"Psychotherapy could relieve serious problems.",
+"Professional help should be last resort.",
+"I could get professional help if I wanted.",
+"Important people would think less of me.",
+"Problems usually work out themselves.",
+"I could find time to see a professional.",
+"I have experiences I would not discuss with anyone.",
+"I would want help if upset for long time.",
+"I’d feel uncomfortable because others might know.",
+"A diagnosis is a blot on life.",
+"Handling fears without help is admirable.",
+"I’d first seek professional attention.",
+"I’d feel uneasy about others’ opinions.",
+"Strong people solve problems alone.",
+"I would confide intimate matters to help.",
+"I wouldn’t hide receiving treatment.",
+"I’d be embarrassed seen entering clinic."
+];
+
+let html="";
+items.forEach((q,i)=>{
+html+=`<div class="question"><p>${i+1}. ${q}</p><div class="scale">`;
+for(let j=0;j<=4;j++){
+html+=`<label><input type="radio" name="q${i}" value="${j}" required>${j}</label>`;
+}
+html+=`</div></div>`;
+});
+document.getElementById("questions").innerHTML=html;
+
+function submitForm(){
+document.getElementById("msg").innerHTML="Thank you. Response recorded.";
+}
+</script>
+
+</body>
+</html>
