@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>IASMHS Survey</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+body{font-family:Arial;background:#eef2f5;padding:40px;}
+.container{background:white;padding:25px;max-width:800px;margin:auto;border-radius:10px;}
+.question{margin-top:18px;}
+.scale label{margin-right:10px;}
+button{margin-top:30px;padding:12px 20px;background:#2e7d32;color:white;border:none;border-radius:6px;}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Attitudes Toward Seeking Mental Health Services</h2>
+<h3>Participant Details</h3>
+<label>Sex:</label>
+<select id="sex">
+  <option value="">Select</option>
+  <option>Male</option>
+  <option>Female</option>
+  <option>Other</option>
+</select>
+<br><br>
+<label>Age:</label>
+<input type="number" id="age">
+<br><br>
+<label>Area:</label>
+<select id="area">  <!-- Fixed: Added closing tag -->
+  <option value="">Select</option>
+  <option>Urban</option>
+  <option>Semi Urban</option>
+  <option>Rural</option>
+</select>  <!-- Fixed: Added missing closing tag -->
+<hr>
+ 
+<p><b>Consent:</b> Anonymous academic research. Please answer honestly.</p>
+<p>0=Disagree | 1=Somewhat Disagree | 2=Undecided | 3=Somewhat Agree | 4=Agree</p>
+<div id="questions"></div>
+<button onclick="submitForm()">Submit & Download PDF</button>
+<p id="msg"></p>
+</div>
+ 
+<script>
+const items = [
+"There are certain problems which should not be discussed outside of one's immediate family.",
+"I would have a very good idea of what to do and who to talk to if I decided to seek professional help for psychological problems.",
+"I would not want my significant other (spouse, partner, etc.) to know if I were suffering from psychological problems.",
+"Keeping one‟s mind on a job is a good solution for avoiding personal worries and concerns.",
+"If good friends asked my advice about a psychological problem, I might recommend that they see a professional.",
+"Having been mentally ill carries with it a burden of shame.",
+"It is probably best not to know everything about oneself.",
+"If I were experiencing a serious psychological problem at this point in my life, I would be confident that I could find relief in psychotherapy.",
+"People should work out their own problems; getting professional help should be a last resort.",
+"If I were to experience psychological problems, I could get professional help if I wanted to.",
+"Important people in my life would think less of me if they were to find out that I was experiencing psychological problems.",
+"Psychological problems, like many things, tend to work out by themselves.",
+"It would be relatively easy for me to find the time to see a professional for psychological problems.",
+"There are experiences in my life I would not discuss with anyone",
+"I would want to get professional help if I were worried or upset for a long period of time.",
+"I would be uncomfortable seeking professional help for psychological problems because people in my social or business circles might find out about it.",
+"Having been diagnosed with a mental disorder is a blot on a person‟s life.",
+"There is something admirable in the attitude of people who are willing to cope with their conflicts and fears without resorting to professional help.",
+"If I believed I were having a mental breakdown, my first inclination would be to get professional attention.",
+"I would feel uneasy going to a professional because of what some people would think.",
+"People with strong characters can get over psychological problems by themselves and would have little need for professional help.",
+"I would willingly confide intimate matters to an appropriate person if I thought it might help me or a member of my family.",
+"Had I received treatment for psychological problems, I would not feel that it ought to be “covered up.",
+"I would be embarrassed if my neighbor saw me going into the office of a professional who deals with psychological problems."
+];
+let html="";
+items.forEach((q,i)=>{
+html+=`<div class="question"><p>${i+1}. ${q}</p><div class="scale">`;
+for(let j=0;j<=4;j++){
+html+=`<label><input type="radio" name="q${i}" value="${j}" required>${j}</label>`;
+}
+html+=`</div></div>`;
+});
+document.getElementById("questions").innerHTML=html;
+
+async function submitForm(){
+let responses = {};
+// collect answers
+for(let i=0;i<24;i++){
+let val=document.querySelector('input[name="q'+i+'"]:checked');
+responses["Q"+(i+1)] = val ? val.value : "";
+}
+// send to google sheet
+await fetch("https://script.google.com/macros/s/AKfycbwM0YQSglMyPu1Sg0LGllXhYr4FLGrvR3MnHQiw00IITNblyySg-QvgnzNK_4GbeP7Z/exec", {
+method:"POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify(responses)
+});
+// create pdf
+const { jsPDF } = window.jspdf;
+const doc = new jsPDF();
+let y=10;
+doc.text("Mental Health Survey Response",10,y);
+y+=10;
+for(let key in responses){
+doc.text(key + " : " + responses[key],10,y);
+y+=8;
+if(y>280){ doc.addPage(); y=10;}
+}
+doc.save("Survey_Response.pdf");
+document.getElementById("msg").innerHTML="Submitted & PDF downloaded";
+}  // Fixed: Added missing closing brace for submitForm function
+</script>
+</body>
+</html>
