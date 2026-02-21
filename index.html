@@ -84,6 +84,13 @@ button:disabled{background:#cccccc;cursor:not-allowed;}
         <option>PG (Postgraduate)</option>
     </select>
     
+    <label for="area">Area of Residence:</label>
+    <select id="area" required>
+        <option value="">Select</option>
+        <option>Urban</option>
+        <option>Rural</option>
+    </select>
+    
     <label for="domicile">Domicile (Home State):</label>
     <select id="domicile" required>
         <option value="">Select</option>
@@ -179,25 +186,6 @@ function generateQuestions() {
 // Call generateQuestions when page loads
 generateQuestions();
 
-// Function to show survey after demographics are filled
-function showSurvey() {
-    // Validate demographics
-    const sex = document.getElementById("sex").value;
-    const age = document.getElementById("age").value;
-    const education = document.getElementById("education").value;
-    const domicile = document.getElementById("domicile").value;
-    const stream = document.getElementById("stream").value;
-    const department = document.getElementById("department").value;
-    
-    if (!sex || !age || !education || !domicile || !stream || !department) {
-        alert("Please fill in all demographic fields before proceeding to the survey.");
-        return false;
-    }
-    
-    document.getElementById("surveySection").classList.remove("hidden");
-    return true;
-}
-
 async function submitForm() {
     const statusDiv = document.getElementById("status");
     statusDiv.innerHTML = "Processing...";
@@ -214,11 +202,12 @@ async function submitForm() {
     const sex = document.getElementById("sex").value;
     const age = document.getElementById("age").value;
     const education = document.getElementById("education").value;
+    const area = document.getElementById("area").value;
     const domicile = document.getElementById("domicile").value;
     const stream = document.getElementById("stream").value;
     const department = document.getElementById("department").value;
     
-    if (!sex || !age || !education || !domicile || !stream || !department) {
+    if (!sex || !age || !education || !area || !domicile || !stream || !department) {
         statusDiv.innerHTML = '<span class="error">Please fill in all demographic fields</span>';
         return;
     }
@@ -249,6 +238,7 @@ async function submitForm() {
         "Sex": sex,
         "Age": age,
         "Education": education,
+        "Area": area,
         "Domicile": domicile,
         "Stream": stream,
         "Department": department,
@@ -306,6 +296,8 @@ function createAndDownloadPDF(responses) {
     y += 6;
     doc.text(`Education: ${responses.Education}`, 25, y);
     y += 6;
+    doc.text(`Area of Residence: ${responses.Area}`, 25, y);
+    y += 6;
     doc.text(`Domicile: ${responses.Domicile}`, 25, y);
     y += 6;
     doc.text(`Stream: ${responses.Stream}`, 25, y);
@@ -343,6 +335,7 @@ function createAndDownloadPDF(responses) {
 document.getElementById('sex').addEventListener('change', checkDemographics);
 document.getElementById('age').addEventListener('change', checkDemographics);
 document.getElementById('education').addEventListener('change', checkDemographics);
+document.getElementById('area').addEventListener('change', checkDemographics);
 document.getElementById('domicile').addEventListener('change', checkDemographics);
 document.getElementById('stream').addEventListener('change', checkDemographics);
 document.getElementById('department').addEventListener('input', checkDemographics);
@@ -354,11 +347,12 @@ function checkDemographics() {
     const sex = document.getElementById("sex").value;
     const age = document.getElementById("age").value;
     const education = document.getElementById("education").value;
+    const area = document.getElementById("area").value;
     const domicile = document.getElementById("domicile").value;
     const stream = document.getElementById("stream").value;
     const department = document.getElementById("department").value;
     
-    if (sex && age && education && domicile && stream && department) {
+    if (sex && age && education && area && domicile && stream && department) {
         if (age >= 18 && age <= 25) {
             document.getElementById("surveySection").classList.remove("hidden");
         }
