@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>IASMHS Survey</title>
+<title>IASMHS Survey - Ravenshaw University</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 body{font-family:Arial;background:#eef2f5;padding:40px;}
@@ -11,42 +11,115 @@ body{font-family:Arial;background:#eef2f5;padding:40px;}
 .scale label{margin-right:10px;}
 button{margin-top:30px;padding:12px 20px;background:#2e7d32;color:white;border:none;border-radius:6px;cursor:pointer;}
 button:hover{background:#1e5622;}
-.error{color:red;margin-top:10px;}
-.success{color:green;margin-top:10px;}
+button:disabled{background:#cccccc;cursor:not-allowed;}
+.error{color:red;margin-top:10px;font-size:14px;}
+.success{color:green;margin-top:10px;font-size:14px;}
+.consent-box{border:1px solid #ccc;padding:20px;margin-bottom:20px;background:#f9f9f9;border-radius:5px;}
+.consent-box h3{margin-top:0;color:#2e7d32;}
+.consent-check{margin:15px 0;font-weight:bold;}
+.demographics{background:#f5f5f5;padding:20px;border-radius:5px;margin-bottom:20px;}
+.demographics h3{color:#2e7d32;margin-top:0;}
+.demographics select,.demographics input{padding:8px;width:100%;max-width:300px;margin-bottom:15px;border:1px solid #ccc;border-radius:4px;}
+.demographics label{font-weight:bold;display:block;margin-bottom:5px;}
+.hidden{display:none;}
 </style>
 </head>
 <body>
 <div class="container">
 <h2>Attitudes Toward Seeking Mental Health Services</h2>
-<h3>Participant Details</h3>
-<label>Sex:</label>
-<select id="sex" required>
-  <option value="">Select</option>
-  <option>Male</option>
-  <option>Female</option>
-  <option>Other</option>
-</select>
-<br><br>
-<label>Age:</label>
-<input type="number" id="age" required min="18" max="120">
-<br><br>
-<label>Area:</label>
-<select id="area" required>
-  <option value="">Select</option>
-  <option>Urban</option>
-  <option>Semi Urban</option>
-  <option>Rural</option>
-</select>
-<hr>
- 
-<p><b>Consent:</b> Anonymous academic research. Please answer honestly.</p>
-<p>0=Disagree | 1=Somewhat Disagree | 2=Undecided | 3=Somewhat Agree | 4=Agree</p>
-<div id="questions"></div>
-<button onclick="submitForm()">Submit & Download PDF</button>
+<h3>Ravenshaw University Research Study</h3>
+
+<!-- Informed Consent Section -->
+<div class="consent-box" id="consentSection">
+    <h3>INFORMED CONSENT FORM</h3>
+    <p><strong>Title of Study:</strong> Attitudes Towards Psychological Counselling Among Ravenshaw University Students</p>
+    <p><strong>Researcher:</strong> Dissertation Student, Department of Psychology, Ravenshaw University</p>
+    
+    <p><strong>Invitation:</strong> You are invited to participate in a dissertation study on attitudes towards psychological counselling among Ravenshaw University students.</p>
+    
+    <p><strong>Procedure:</strong> Participation involves a brief 5-10 minute questionnaire about your views on mental health and counselling services.</p>
+    
+    <p><strong>Risks and Benefits:</strong> No physical or psychological risks are anticipated. While there are no direct benefits to you, your participation will contribute to understanding mental health attitudes among university students.</p>
+    
+    <p><strong>Voluntary Participation:</strong> Your participation is completely voluntary. You may withdraw at any time without any penalty or consequence.</p>
+    
+    <p><strong>Anonymity:</strong> All responses are completely anonymous—no identifying information (name, student ID, etc.) will be collected. Data will be used solely for academic purposes and reported only in aggregate.</p>
+    
+    <p><strong>Eligibility:</strong> To participate, you must be a Ravenshaw University student aged 18 to 25 years.</p>
+    
+    <p><strong>Contact:</strong> If you have questions about this study, please contact the researcher through the Department of Psychology, Ravenshaw University.</p>
+    
+    <p><strong>Statement of Consent:</strong></p>
+    <div class="consent-check">
+        <label>
+            <input type="checkbox" id="consentCheck" onclick="toggleDemographics()"> 
+            <strong>I confirm that I am a Ravenshaw University student aged 18 to 25, and I voluntarily consent to participate in this study.</strong>
+        </label>
+    </div>
+    
+    <p id="consentError" class="error hidden">You must provide consent to continue.</p>
+</div>
+
+<!-- Demographics Section (Initially Hidden) -->
+<div id="demographicsSection" class="demographics hidden">
+    <h3>Participant Demographics</h3>
+    <p>Please provide the following information:</p>
+    
+    <label for="sex">Sex:</label>
+    <select id="sex" required>
+        <option value="">Select</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+        <option>Prefer not to say</option>
+    </select>
+    
+    <label for="age">Age:</label>
+    <input type="number" id="age" required min="18" max="25" placeholder="18-25">
+    
+    <label for="education">Education Level:</label>
+    <select id="education" required>
+        <option value="">Select</option>
+        <option>UG (Undergraduate)</option>
+        <option>PG (Postgraduate)</option>
+    </select>
+    
+    <label for="domicile">Domicile (Home State):</label>
+    <select id="domicile" required>
+        <option value="">Select</option>
+        <option>Odisha</option>
+        <option>Other State (India)</option>
+        <option>International</option>
+    </select>
+    
+    <label for="stream">Stream:</label>
+    <select id="stream" required>
+        <option value="">Select</option>
+        <option>Science</option>
+        <option>Arts/Humanities</option>
+        <option>Commerce</option>
+        <option>Professional (Engineering/Management/etc.)</option>
+    </select>
+    
+    <label for="department">Department:</label>
+    <input type="text" id="department" placeholder="e.g., Psychology, Physics, English" required>
+    <small style="color:#666;">Please enter your department name</small>
+    
+    <hr>
+    <p><b>Consent Confirmed:</b> Thank you for agreeing to participate. Please answer honestly.</p>
+    <p><b>Scale:</b> 0=Disagree | 1=Somewhat Disagree | 2=Undecided | 3=Somewhat Agree | 4=Agree</p>
+</div>
+
+<!-- Survey Questions Section (Initially Hidden) -->
+<div id="surveySection" class="hidden">
+    <div id="questions"></div>
+    <button onclick="submitForm()">Submit & Download PDF</button>
+</div>
+
 <p id="msg"></p>
 <div id="status"></div>
 </div>
- 
+
 <script>
 const items = [
 "There are certain problems which should not be discussed outside of one's immediate family.",
@@ -75,28 +148,84 @@ const items = [
 "I would be embarrassed if my neighbor saw me going into the office of a professional who deals with psychological problems."
 ];
 
-// Generate questions
-let html = "";
-items.forEach((q, i) => {
-    html += `<div class="question"><p>${i+1}. ${q}</p><div class="scale">`;
-    for(let j = 0; j <= 4; j++) {
-        html += `<label><input type="radio" name="q${i}" value="${j}" required> ${j}</label>`;
+// Function to toggle demographics and survey sections based on consent
+function toggleDemographics() {
+    const consentCheck = document.getElementById("consentCheck");
+    const demographicsSection = document.getElementById("demographicsSection");
+    const consentError = document.getElementById("consentError");
+    
+    if (consentCheck.checked) {
+        demographicsSection.classList.remove("hidden");
+        consentError.classList.add("hidden");
+    } else {
+        demographicsSection.classList.add("hidden");
+        document.getElementById("surveySection").classList.add("hidden");
     }
-    html += `</div></div>`;
-});
-document.getElementById("questions").innerHTML = html;
+}
+
+// Generate questions
+function generateQuestions() {
+    let html = "";
+    items.forEach((q, i) => {
+        html += `<div class="question"><p>${i+1}. ${q}</p><div class="scale">`;
+        for(let j = 0; j <= 4; j++) {
+            html += `<label><input type="radio" name="q${i}" value="${j}" required> ${j}</label>`;
+        }
+        html += `</div></div>`;
+    });
+    document.getElementById("questions").innerHTML = html;
+}
+
+// Call generateQuestions when page loads
+generateQuestions();
+
+// Function to show survey after demographics are filled
+function showSurvey() {
+    // Validate demographics
+    const sex = document.getElementById("sex").value;
+    const age = document.getElementById("age").value;
+    const education = document.getElementById("education").value;
+    const domicile = document.getElementById("domicile").value;
+    const stream = document.getElementById("stream").value;
+    const department = document.getElementById("department").value;
+    
+    if (!sex || !age || !education || !domicile || !stream || !department) {
+        alert("Please fill in all demographic fields before proceeding to the survey.");
+        return false;
+    }
+    
+    document.getElementById("surveySection").classList.remove("hidden");
+    return true;
+}
 
 async function submitForm() {
     const statusDiv = document.getElementById("status");
     statusDiv.innerHTML = "Processing...";
     
-    // Validate participant details
+    // Check consent
+    const consentCheck = document.getElementById("consentCheck");
+    if (!consentCheck.checked) {
+        document.getElementById("consentError").classList.remove("hidden");
+        statusDiv.innerHTML = '<span class="error">You must provide consent to participate.</span>';
+        return;
+    }
+    
+    // Validate demographics
     const sex = document.getElementById("sex").value;
     const age = document.getElementById("age").value;
-    const area = document.getElementById("area").value;
+    const education = document.getElementById("education").value;
+    const domicile = document.getElementById("domicile").value;
+    const stream = document.getElementById("stream").value;
+    const department = document.getElementById("department").value;
     
-    if (!sex || !age || !area) {
-        statusDiv.innerHTML = '<span class="error">Please fill in all participant details</span>';
+    if (!sex || !age || !education || !domicile || !stream || !department) {
+        statusDiv.innerHTML = '<span class="error">Please fill in all demographic fields</span>';
+        return;
+    }
+    
+    // Validate age range
+    if (age < 18 || age > 25) {
+        statusDiv.innerHTML = '<span class="error">Age must be between 18 and 25 years</span>';
         return;
     }
     
@@ -116,9 +245,13 @@ async function submitForm() {
     }
     
     let responses = {
+        "Consent": "Yes",
         "Sex": sex,
         "Age": age,
-        "Area": area,
+        "Education": education,
+        "Domicile": domicile,
+        "Stream": stream,
+        "Department": department,
         "Timestamp": new Date().toISOString()
     };
     
@@ -129,10 +262,10 @@ async function submitForm() {
     }
     
     try {
-        // Try to send to Google Sheets, but don't wait for it
+        // Try to send to Google Sheets
         fetch("https://script.google.com/macros/s/AKfycbwM0YQSglMyPu1Sg0LGllXhYr4FLGrvR3MnHQiw00IITNblyySg-QvgnzNK_4GbeP7Z/exec", {
             method: "POST",
-            mode: "no-cors", // This helps with CORS issues
+            mode: "no-cors",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(responses)
         }).catch(err => console.log("Google Sheets submission error:", err));
@@ -140,14 +273,13 @@ async function submitForm() {
         // Create and download PDF immediately
         createAndDownloadPDF(responses);
         
-        statusDiv.innerHTML = '<span class="success">PDF downloaded successfully!</span>';
-        document.getElementById("msg").innerHTML = "Thank you for your participation!";
+        statusDiv.innerHTML = '<span class="success">PDF downloaded successfully! Thank you for your participation.</span>';
+        document.getElementById("msg").innerHTML = "Your responses have been recorded.";
         
     } catch (error) {
         console.error("Error:", error);
-        // Still try to download PDF even if Google Sheets fails
         createAndDownloadPDF(responses);
-        statusDiv.innerHTML = '<span class="success">PDF downloaded successfully! (Note: Data was not saved to cloud)</span>';
+        statusDiv.innerHTML = '<span class="success">PDF downloaded successfully! (Note: Cloud save unavailable)</span>';
     }
 }
 
@@ -158,25 +290,40 @@ function createAndDownloadPDF(responses) {
     
     // Title
     doc.setFontSize(16);
-    doc.text("Mental Health Survey Response", 20, y);
+    doc.text("Mental Health Survey Response - Ravenshaw University", 20, y);
     y += 15;
     
-    // Participant Info
+    // Consent and Demographics
     doc.setFontSize(12);
-    doc.text(`Sex: ${responses.Sex}`, 20, y);
+    doc.text("CONSENT AND DEMOGRAPHICS:", 20, y);
     y += 8;
-    doc.text(`Age: ${responses.Age}`, 20, y);
-    y += 8;
-    doc.text(`Area: ${responses.Area}`, 20, y);
-    y += 8;
-    doc.text(`Timestamp: ${responses.Timestamp}`, 20, y);
+    doc.setFontSize(10);
+    doc.text(`Consent Provided: ${responses.Consent}`, 25, y);
+    y += 6;
+    doc.text(`Sex: ${responses.Sex}`, 25, y);
+    y += 6;
+    doc.text(`Age: ${responses.Age}`, 25, y);
+    y += 6;
+    doc.text(`Education: ${responses.Education}`, 25, y);
+    y += 6;
+    doc.text(`Domicile: ${responses.Domicile}`, 25, y);
+    y += 6;
+    doc.text(`Stream: ${responses.Stream}`, 25, y);
+    y += 6;
+    doc.text(`Department: ${responses.Department}`, 25, y);
+    y += 6;
+    doc.text(`Timestamp: ${responses.Timestamp}`, 25, y);
     y += 15;
     
-    // Responses
+    // Survey Responses
+    doc.setFontSize(12);
+    doc.text("SURVEY RESPONSES:", 20, y);
+    y += 8;
     doc.setFontSize(10);
+    
     for(let i = 1; i <= 24; i++) {
         let response = responses["Q" + i] || "Not answered";
-        doc.text(`Question ${i}: ${response}`, 20, y);
+        doc.text(`Q${i}: ${response}`, 25, y);
         y += 6;
         
         if(y > 280) {
@@ -185,16 +332,37 @@ function createAndDownloadPDF(responses) {
         }
     }
     
-    doc.save("Mental_Health_Survey_Response.pdf");
+    // Add footer
+    doc.setFontSize(8);
+    doc.text("Confidential - For Academic Research Only", 20, 290);
+    
+    doc.save("Ravenshaw_Mental_Health_Survey.pdf");
 }
 
-// Optional: Add function to check if all questions are answered
-function checkAllAnswered() {
-    for(let i = 0; i < 24; i++) {
-        let val = document.querySelector('input[name="q' + i + '"]:checked');
-        if (!val) return false;
+// Add event listener to demographics to show survey when all fields are filled
+document.getElementById('sex').addEventListener('change', checkDemographics);
+document.getElementById('age').addEventListener('change', checkDemographics);
+document.getElementById('education').addEventListener('change', checkDemographics);
+document.getElementById('domicile').addEventListener('change', checkDemographics);
+document.getElementById('stream').addEventListener('change', checkDemographics);
+document.getElementById('department').addEventListener('input', checkDemographics);
+
+function checkDemographics() {
+    const consentCheck = document.getElementById("consentCheck");
+    if (!consentCheck.checked) return;
+    
+    const sex = document.getElementById("sex").value;
+    const age = document.getElementById("age").value;
+    const education = document.getElementById("education").value;
+    const domicile = document.getElementById("domicile").value;
+    const stream = document.getElementById("stream").value;
+    const department = document.getElementById("department").value;
+    
+    if (sex && age && education && domicile && stream && department) {
+        if (age >= 18 && age <= 25) {
+            document.getElementById("surveySection").classList.remove("hidden");
+        }
     }
-    return true;
 }
 </script>
 </body>
