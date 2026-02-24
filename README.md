@@ -1,1 +1,2 @@
-# Inventory-of-Attitudes-Toward-Seeking-Mental-Health-Services-IASMHS-.
+# Attitudes Toward Seeking Professional Psychological Help Scale
+Short Version; ATSPPH-SF
