@@ -2,31 +2,46 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>ATSPPH-SF Survey - Ravenshaw University</title>
+<title>A Comparative Study of Sleep Metacognition and Sleep Quality Among Undergraduate and Postgraduate Students: The Mediating Role of Emotion Regulation</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 body{font-family:Arial;background:#eef2f5;padding:40px;}
-.container{background:white;padding:25px;max-width:800px;margin:auto;border-radius:10px;}
+.container{background:white;padding:25px;max-width:900px;margin:auto;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);}
+
+/* Navigation */
+.section-nav{display:flex;justify-content:space-between;margin:20px 0;gap:10px;}
+.nav-btn{padding:12px 20px;background:#2e7d32;color:white;border:none;border-radius:8px;cursor:pointer;font-size:16px;font-weight:bold;flex:1;}
+.nav-btn:disabled{background:#cccccc;cursor:not-allowed;}
+.nav-btn:hover:not(:disabled){background:#1e5622;}
+.progress-bar{height:10px;background:#e0e0e0;border-radius:5px;margin:20px 0;overflow:hidden;}
+.progress-fill{height:100%;background:#2e7d32;width:0%;transition:width 0.3s;}
+
+/* Sections */
+.section{display:none;}
+.section.active{display:block;}
+.section-title{font-size:20px;color:#2e7d32;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #2e7d32;}
+
 button{margin-top:30px;padding:15px 25px;background:#2e7d32;color:white;border:none;border-radius:8px;cursor:pointer;font-size:18px;font-weight:bold;width:100%;transition:background 0.2s;}
 button:hover{background:#1e5622;}
 button:disabled{background:#cccccc;cursor:not-allowed;}
 .error{color:red;margin-top:10px;font-size:14px;font-weight:bold;}
 .success{color:green;margin-top:10px;font-size:14px;font-weight:bold;}
-.consent-box{border:1px solid #2e7d32;padding:25px;margin-bottom:30px;background:#f9f9f9;border-radius:10px;box-shadow:0 2px 4px rgba(0,0,0,0.1);}
+.consent-box{border:2px solid #2e7d32;padding:25px;margin-bottom:30px;background:#f9f9f9;border-radius:10px;box-shadow:0 2px 4px rgba(0,0,0,0.1);}
 .consent-box h3{margin-top:0;color:#2e7d32;}
 .consent-check{margin:20px 0;font-weight:bold;}
-.demographics{background:#f5f5f5;padding:25px;border-radius:10px;margin-bottom:30px;border:1px solid #2e7d32;}
+.demographics{background:#f5f5f5;padding:25px;border-radius:10px;margin-bottom:30px;border:2px solid #2e7d32;}
 .demographics h3{color:#2e7d32;margin-top:0;}
-.demographics select,.demographics input{padding:10px;width:100%;max-width:300px;margin-bottom:15px;border:2px solid #ccc;border-radius:6px;font-size:14px;}
+.demographics select,.demographics input{padding:10px;width:100%;max-width:300px;margin-bottom:5px;border:2px solid #ccc;border-radius:6px;font-size:14px;}
 .demographics select:focus,.demographics input:focus{border-color:#2e7d32;outline:none;}
 .demographics label{font-weight:bold;display:block;margin-bottom:5px;color:#333;}
+.demographics .field-note{font-size:12px;color:#666;margin-bottom:15px;margin-top:0;font-style:italic;}
 .hidden{display:none;}
 .footer-note{margin-top:40px;font-size:12px;color:#666;text-align:center;border-top:2px solid #2e7d32;padding-top:20px;}
 .scale-note{background:#e8f5e9;padding:15px;border-radius:8px;margin:20px 0;font-size:15px;border-left:5px solid #2e7d32;}
 .loading{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1000;justify-content:center;align-items:center;color:white;font-size:28px;font-weight:bold;flex-direction:column;}
 .loading p{background:#2e7d32;padding:20px 40px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.3);}
 
-/* Question box styling with hover effect */
+/* Question box styling */
 .question{
     margin-top:20px;
     margin-bottom:20px;
@@ -35,15 +50,6 @@ button:disabled{background:#cccccc;cursor:not-allowed;}
     border-radius:10px;
     background:#f9f9f9;
     box-shadow:0 2px 4px rgba(0,0,0,0.1);
-    transition:all 0.3s ease;
-}
-
-/* Hover effect on entire question box */
-.question:hover{
-    background:#e8f5e9;
-    border-color:#1e5622;
-    box-shadow:0 8px 16px rgba(46,125,50,0.3);
-    transform:translateY(-2px);
 }
 
 .question p{
@@ -63,110 +69,123 @@ button:disabled{background:#cccccc;cursor:not-allowed;}
     padding:5px 2px;
 }
 
-/* Smaller response option boxes */
+/* Response option boxes */
 .scale label{
     display:flex;
     flex-direction:column;
     align-items:center;
-    padding:6px 8px;
+    padding:8px 10px;
     border:1px solid #2e7d32;
     border-radius:5px;
     background:white;
     cursor:pointer;
-    transition:all 0.2s;
-    min-width:50px;
+    min-width:60px;
     text-align:center;
     font-size:13px;
+    transition:all 0.2s;
 }
 
 .scale label:hover{
-    background:#c8e6c9;
+    background:#e8f5e9;
     transform:translateY(-2px);
-    box-shadow:0 2px 4px rgba(46,125,50,0.3);
-    border-color:#1e5622;
+    box-shadow:0 2px 4px rgba(46,125,50,0.2);
 }
 
 .scale input[type="radio"]{
-    margin-bottom:3px;
-    transform:scale(1);
+    margin-bottom:5px;
     cursor:pointer;
+    transform:scale(1.1);
 }
 
 .scale span{
-    font-size:10px;
+    font-size:11px;
     color:#555;
-    margin-top:2px;
+    margin-top:3px;
     font-weight:normal;
-}
-
-/* Selected radio button styling */
-.scale input[type="radio"]:checked + span{
-    color:#2e7d32;
-    font-weight:bold;
 }
 
 .scale label:has(input[type="radio"]:checked){
     background:#e8f5e9;
     border-width:2px;
     border-color:#1e5622;
+    font-weight:bold;
 }
 
-/* Save status indicator */
-.save-status{
-    margin-top:15px;
+/* Table styling for SCI */
+.scale-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:15px 0;
+    font-size:13px;
+}
+.scale-table th{
+    background:#2e7d32;
+    color:white;
     padding:10px;
-    border-radius:5px;
     font-size:14px;
+}
+.scale-table td{
+    border:1px solid #2e7d32;
+    padding:10px;
+}
+.scale-table .response-cell{
+    background:#f9f9f9;
     text-align:center;
 }
-.save-status.success{background:#d4edda;color:#155724;border:1px solid #c3e6cb;}
-.save-status.error{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;}
-.save-status.warning{background:#fff3cd;color:#856404;border:1px solid #ffeeba;}
+.scale-table .response-cell label{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:8px;
+    cursor:pointer;
+    border-radius:5px;
+}
+.scale-table .response-cell label:hover{
+    background:#e8f5e9;
+}
+.scale-table .response-cell input[type="radio"]{
+    margin-bottom:5px;
+    transform:scale(1.1);
+}
+
+/* Certificate Preview */
+.certificate-preview{display:none;}
 </style>
 </head>
 <body>
 <div class="loading" id="loading">
-    <p>Processing... Please wait</p>
+    <p>Generating your certificate... Please wait</p>
 </div>
 
 <div class="container">
-<h2>Attitudes Toward Seeking Professional Psychological Help</h2>
-<h3>Ravenshaw University Research Study</h3>
+<h1 style="color:#2e7d32; text-align:center; font-size:24px;">A Comparative Study of Sleep Metacognition and Sleep Quality Among Undergraduate and Postgraduate Students: The Mediating Role of Emotion Regulation</h1>
+<h3 style="text-align:center; color:#666;">Ravenshaw University Research Study</h3>
 
 <!-- Informed Consent Section -->
 <div class="consent-box" id="consentSection">
-    <h3>INFORMED CONSENT FORM</h3>
-    <p><strong>Title of Study:</strong> Attitudes Towards Seeking Professional Psychological Help Among Ravenshaw University Students</p>
-    <p><strong>Researcher:</strong> Post Graduate Student, Department of Psychology, Ravenshaw University</p>
+    <h3>📋 INFORMED CONSENT FORM</h3>
+    <p><strong>Title of Study:</strong> A Comparative Study of Sleep Metacognition and Sleep Quality Among Undergraduate and Postgraduate Students: The Mediating Role of Emotion Regulation</p>
+    <p><strong>Researcher:</strong> Department of Psychology, Ravenshaw University</p>
     
-    <p><strong>Invitation:</strong> You are invited to participate in a dissertation study on attitudes towards seeking professional psychological help among Ravenshaw University students.</p>
+    <p><strong>Procedure:</strong> This survey contains three sections about your sleep patterns, thoughts about sleep, and emotion regulation. It will take approximately 10-15 minutes to complete.</p>
     
-    <p><strong>Procedure:</strong> Participation involves a brief 5-10 minute questionnaire about your views on mental health and professional help-seeking.</p>
+    <p><strong>Anonymity:</strong> All responses are completely anonymous. A random participant ID will be generated for your certificate.</p>
     
-    <p><strong>Risks and Benefits:</strong> No physical or psychological risks are anticipated. While there are no direct benefits to you, your participation will contribute to understanding mental health attitudes among university students.</p>
+    <p><strong>Eligibility:</strong> Ravenshaw University students aged 18 to 25 years.</p>
     
-    <p><strong>Voluntary Participation:</strong> Your participation is completely voluntary. You may withdraw at any time without any penalty or consequence.</p>
-    
-    <p><strong>Anonymity:</strong> All responses are completely anonymous—no identifying information (name, student ID, etc.) will be collected. A random participant ID will be generated for tracking purposes only.</p>
-    
-    <p><strong>Eligibility:</strong> To participate, you must be a Ravenshaw University student aged 18 to 25 years.</p>
-    
-    <p><strong>Contact:</strong> If you have questions about this study, please contact the researcher through the Department of Psychology, Ravenshaw University.</p>
-    
-    <p><strong>Statement of Consent:</strong></p>
     <div class="consent-check">
         <label>
             <input type="checkbox" id="consentCheck" onclick="toggleDemographics()"> 
-            <strong>I confirm that I am a Ravenshaw University student aged 18 to 25, and I voluntarily consent to participate in this study.</strong>
+            <strong>✓ I confirm that I am a Ravenshaw University student aged 18 to 25, and I voluntarily consent to participate.</strong>
         </label>
     </div>
     
     <p id="consentError" class="error hidden">You must provide consent to continue.</p>
 </div>
 
-<!-- Demographics Section (Initially Hidden) -->
+<!-- Demographics Section -->
 <div id="demographicsSection" class="demographics hidden">
-    <h3>Participant Demographics</h3>
+    <h3>👤 Participant Demographics</h3>
     <p>Please provide the following information:</p>
     
     <label for="sex">Sex:</label>
@@ -180,6 +199,7 @@ button:disabled{background:#cccccc;cursor:not-allowed;}
     
     <label for="age">Age:</label>
     <input type="number" id="age" required min="18" max="25" placeholder="18-25">
+    <div class="field-note">ⓘ Please enter your age (18-25 years)</div>
     
     <label for="area">Area of Residence:</label>
     <select id="area" required>
@@ -209,122 +229,226 @@ button:disabled{background:#cccccc;cursor:not-allowed;}
         <option>Science</option>
         <option>Arts/Humanities</option>
         <option>Commerce</option>
-        <option>Professional (Engineering/Management/etc.)</option>
+        <option>Professional</option>
     </select>
     
     <label for="department">Department:</label>
-    <input type="text" id="department" placeholder="e.g., Psychology, Physics, English" required>
-    <small style="color:#666;">Please enter your department name</small>
+    <input type="text" id="department" placeholder="e.g., Psychology, Physics" required>
     
-    <hr>
-    <p><b>Consent Confirmed:</b> Thank you for agreeing to participate. Please answer honestly.</p>
-    
-    <!-- Scale Information -->
-    <div class="scale-note">
-        <p><b>Scale:</b> 0=Disagree | 1=Partly Disagree | 2=Partly Agree | 3=Agree</p>
-        <p><b>Please answer all items based on your own views.</b></p>
-    </div>
+    <button onclick="startSurvey()" id="startBtn" style="margin-top:20px;">▶ START SURVEY</button>
 </div>
 
-<!-- Survey Questions Section (Initially Hidden) -->
+<!-- Survey Sections -->
 <div id="surveySection" class="hidden">
-    <div id="questions"></div>
-    <button onclick="submitForm()" id="submitBtn">SUBMIT & DOWNLOAD PDF</button>
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+    
+    <!-- Navigation Buttons -->
+    <div class="section-nav">
+        <button class="nav-btn" id="prevBtn" onclick="navigateSection(-1)" disabled>← Previous Section</button>
+        <button class="nav-btn" id="nextBtn" onclick="navigateSection(1)">Next Section →</button>
+    </div>
+    
+    <!-- Section 1: MCQI-6 -->
+    <div id="section1" class="section active">
+        <div class="section-title">📊 Section 1 of 3: Metacognition about Sleep (MCQI-6)</div>
+        <div class="scale-note">
+            <p><b>Scale:</b> 1=Disagree very much | 2=Disagree moderately | 3=Disagree slightly | 4=Agree slightly | 5=Agree moderately | 6=Agree very much</p>
+        </div>
+        <div id="mcqi-questions"></div>
+    </div>
+    
+    <!-- Section 2: SCI -->
+    <div id="section2" class="section">
+        <div class="section-title">😴 Section 2 of 3: Sleep Condition Indicator (SCI)</div>
+        <div class="scale-note">
+            <p><b>Please select the most accurate response for each item about your sleep over the past month.</b></p>
+        </div>
+        <div id="sci-questions"></div>
+    </div>
+    
+    <!-- Section 3: DERS-16 -->
+    <div id="section3" class="section">
+        <div class="section-title">❤️ Section 3 of 3: Emotion Regulation (DERS-16)</div>
+        <div class="scale-note">
+            <p><b>Scale:</b> 1=Almost never | 2=Sometimes | 3=About half the time | 4=Most of the time | 5=Almost always</p>
+            <p><span style="color:#d32f2f;">ⓘ Items marked (R) are reverse scored</span></p>
+        </div>
+        <div id="ders-questions"></div>
+    </div>
+    
+    <!-- Submit Button (visible only on last section) -->
+    <button onclick="submitForm()" id="submitBtn" class="hidden">🎓 GENERATE CERTIFICATE & SUBMIT</button>
 </div>
-
-<!-- Save Status Indicator -->
-<div id="saveStatus" class="save-status hidden"></div>
 
 <p id="msg"></p>
 <div id="status"></div>
+<div id="saveStatus" style="font-size:12px; margin-top:5px; color:#666; text-align:center;"></div>
 
-<!-- Copyright and References Footer -->
+<!-- Footer -->
 <div class="footer-note">
     <p><strong>© 2025 Ravenshaw University, Department of Psychology. All rights reserved.</strong></p>
-    <p><strong>Reference:</strong> Fischer, E. H., & Farina, A. (1995). Attitudes toward seeking professional psychological help: A shortened form. Journal of College Student Development, 36, 368-373.</p>
-    <p>This inventory is used for academic research purposes only. The scale is free to use without restriction with proper citation.</p>
+    <p><strong>References:</strong> Lee, J., et al. (2022). Validation of MCQI. Sleep Medicine, 98, 53-61.</p>
+    <p>Espie, C. A., et al. (2014). The Sleep Condition Indicator. BMJ Open, 4(3), e004183.</p>
+    <p>Bjureberg, J., et al. (2016). Difficulties in Emotion Regulation Scale (DERS-16). J Psychopathol Behav Assess.</p>
 </div>
 </div>
 
 <script>
-// ATSPPH-SF Items (10 items)
-const items = [
-"If I believed I was having a mental breakdown, my first inclination would be to get professional attention.",
-"The idea of talking about problems with a psychologist strikes me as a poor way to get rid of emotional conflicts.",
-"If I were experiencing a serious emotional crisis at this point in my life, I would be confident that I could find relief in psychotherapy.",
-"There is something admirable in the attitude of a person who is willing to cope with his or her conflicts and fears without resorting to professional help.",
-"I would want to get psychological help if I were worried or upset for a long period of time.",
-"I might want to have psychological counseling in the future.",
-"A person with an emotional problem is not likely to solve it alone; he or she is likely to solve it with professional help.",
-"Considering the time and expense involved in psychotherapy, it would have doubtful value for a person like me.",
-"A person should work out his or her own problems; getting psychological counseling would be a last resort.",
-"Personal and emotional troubles, like many things, tend to work out by themselves."
+// ==================== MCQI-6 ITEMS ====================
+const mcqiItems = [
+    "Before I fall asleep, I should try and stop physical sensations in my body.",
+    "Before I fall asleep, I should try as many ways as I can to control my thoughts.",
+    "When frustrated in bed, I should tell myself not to be so silly.",
+    "Before I fall asleep, I should try and switch off my thoughts.",
+    "Being awake in bed means I have lost control of my sleep.",
+    "At lights out, I should try and control my sleep."
 ];
 
-// Items that need reverse scoring (2, 4, 8, 9, 10) - using 0-based index
-const reverseScoredItems = [1, 3, 7, 8, 9]; // Indices 1,3,7,8,9 correspond to items 2,4,8,9,10
-
-// Map numeric values to string labels
-const responseLabels = {
-    0: "Disagree",
-    1: "Partly Disagree",
-    2: "Partly Agree",
-    3: "Agree"
+const mcqiLabels = {
+    1: "Disagree very much", 2: "Disagree moderately", 3: "Disagree slightly",
+    4: "Agree slightly", 5: "Agree moderately", 6: "Agree very much"
 };
 
-// Store submitted data in localStorage as backup
-function saveToLocalBackup(data) {
-    try {
-        const backups = JSON.parse(localStorage.getItem('survey_backups') || '[]');
-        backups.push({
-            timestamp: new Date().toISOString(),
-            participantId: data.ParticipantID,
-            data: data
-        });
-        // Keep only last 10 backups
-        if (backups.length > 10) backups.shift();
-        localStorage.setItem('survey_backups', JSON.stringify(backups));
-        return true;
-    } catch (e) {
-        console.error('Local backup failed:', e);
-        return false;
-    }
-}
+// ==================== SCI ITEMS ====================
+const sciItems = [
+    { text: "How long does it take you to fall asleep?", 
+      options: ["0–15 min", "16–30 min", "31–45 min", "46–60 min", "≥ 61 min"] },
+    { text: "If you wake up during the night, how long are you awake for in total?", 
+      options: ["0–15 min", "16–30 min", "31–45 min", "46–60 min", "≥ 61 min"] },
+    { text: "How many nights a week do you have a problem with your sleep?", 
+      options: ["0", "1", "2", "3", "4-7"] },
+    { text: "How would you rate your sleep quality?", 
+      options: ["Very good", "Good", "Average", "Poor", "Very poor"] },
+    { text: "Has poor sleep affected your mood, energy, or relationships?", 
+      options: ["Not at all", "A little", "Somewhat", "Much", "Very much"] },
+    { text: "Has poor sleep affected your concentration or productivity?", 
+      options: ["Not at all", "A little", "Somewhat", "Much", "Very much"] },
+    { text: "How much has poor sleep troubled you in general?", 
+      options: ["Not at all", "A little", "Somewhat", "Much", "Very much"] },
+    { text: "How long have you had a problem with your sleep?", 
+      options: ["No problem", "1–3 mo", "3–6 mo", "6–12 mo", ">1 yr"] }
+];
 
-// Generate random anonymous Participant ID
+// ==================== DERS-16 ITEMS ====================
+const dersItems = [
+    "I have difficulty making sense out of my feelings.",
+    "I am confused about how I feel.",
+    "I am attentive to my feelings. (R)",
+    "I am careful to acknowledge my feelings. (R)",
+    "When I'm upset, I become angry with myself.",
+    "When I'm upset, I become embarrassed for feeling that way.",
+    "When I'm upset, I have difficulty getting work done.",
+    "When I'm upset, I become out of control.",
+    "When I'm upset, I have difficulty focusing.",
+    "When I'm upset, I have difficulty controlling my behaviors.",
+    "When I'm upset, I have difficulty accessing my capabilities.",
+    "When I'm upset, I have difficulty thinking about anything else.",
+    "When I'm upset, my emotions feel overwhelming.",
+    "When I'm upset, I feel guilty for feeling that way.",
+    "When I'm upset, I have difficulty staying focused.",
+    "When I'm upset, I have difficulty getting things done."
+];
+
+const dersLabels = {
+    1: "Almost never", 2: "Sometimes", 3: "About half", 4: "Most of the time", 5: "Almost always"
+};
+
+const dersReverseScored = [2, 3]; // Items 3 and 4 (0-based)
+
+let currentSection = 1;
+const totalSections = 3;
+
+// Generate Participant ID
 function generateParticipantID() {
     const letters = 'RU';
     const numbers = Math.floor(1000 + Math.random() * 9000);
     return `${letters}${numbers}`;
 }
 
-// Function to get interpretation text based on total score
-function getInterpretationText(score) {
-    if (score >= 0 && score <= 10) {
-        return "Strongly negative attitudes toward seeking professional help; likely to avoid services.";
-    } else if (score >= 11 && score <= 20) {
-        return "Moderate attitudes; may seek help selectively or under pressure.";
-    } else if (score >= 21 && score <= 30) {
-        return "Highly positive attitudes; inclined to seek professional help readily when needed.";
-    } else {
-        return "Unable to interpret";
+// Navigation
+function navigateSection(direction) {
+    const newSection = currentSection + direction;
+    if (newSection >= 1 && newSection <= totalSections) {
+        // Validate current section before moving
+        if (direction > 0 && !validateSection(currentSection)) {
+            alert(`Please answer all questions in Section ${currentSection} before proceeding.`);
+            return;
+        }
+        
+        // Hide current section
+        document.getElementById(`section${currentSection}`).classList.remove('active');
+        
+        // Show new section
+        currentSection = newSection;
+        document.getElementById(`section${currentSection}`).classList.add('active');
+        
+        // Update buttons
+        document.getElementById('prevBtn').disabled = currentSection === 1;
+        
+        if (currentSection === totalSections) {
+            document.getElementById('nextBtn').classList.add('hidden');
+            document.getElementById('submitBtn').classList.remove('hidden');
+        } else {
+            document.getElementById('nextBtn').classList.remove('hidden');
+            document.getElementById('submitBtn').classList.add('hidden');
+        }
+        
+        // Update progress bar
+        updateProgress();
     }
 }
 
-// Function to get attitude level based on total score
-function getAttitudeLevel(score) {
-    if (score >= 0 && score <= 10) {
-        return "STRONGLY NEGATIVE";
-    } else if (score >= 11 && score <= 20) {
-        return "MODERATE";
-    } else if (score >= 21 && score <= 30) {
-        return "HIGHLY POSITIVE";
-    } else {
-        return "UNKNOWN";
-    }
+function updateProgress() {
+    const progress = (currentSection / totalSections) * 100;
+    document.getElementById('progressFill').style.width = progress + '%';
 }
 
-// Function to toggle demographics and survey sections based on consent
+function validateSection(section) {
+    if (section === 1) {
+        for(let i = 0; i < 6; i++) {
+            if (!document.querySelector(`input[name="mcqi_${i}"]:checked`)) return false;
+        }
+    } else if (section === 2) {
+        for(let i = 0; i < 8; i++) {
+            if (!document.querySelector(`input[name="sci_${i}"]:checked`)) return false;
+        }
+    } else if (section === 3) {
+        for(let i = 0; i < 16; i++) {
+            if (!document.querySelector(`input[name="ders_${i}"]:checked`)) return false;
+        }
+    }
+    return true;
+}
+
+// Start survey after demographics
+function startSurvey() {
+    const sex = document.getElementById("sex").value;
+    const age = document.getElementById("age").value;
+    const area = document.getElementById("area").value;
+    const education = document.getElementById("education").value;
+    const domicile = document.getElementById("domicile").value;
+    const stream = document.getElementById("stream").value;
+    const department = document.getElementById("department").value;
+    
+    if (!sex || !age || !area || !education || !domicile || !stream || !department) {
+        alert("Please fill in all demographic fields.");
+        return;
+    }
+    
+    if (age < 18 || age > 25) {
+        alert("Age must be between 18 and 25 years.");
+        return;
+    }
+    
+    document.getElementById("demographicsSection").classList.add("hidden");
+    document.getElementById("surveySection").classList.remove("hidden");
+    updateProgress();
+}
+
+// Toggle demographics based on consent
 function toggleDemographics() {
     const consentCheck = document.getElementById("consentCheck");
     const demographicsSection = document.getElementById("demographicsSection");
@@ -339,56 +463,70 @@ function toggleDemographics() {
     }
 }
 
-// Generate questions with 0-3 scale and box styling
-function generateQuestions() {
+// Generate MCQI-6 questions
+function generateMCQIQuestions() {
     let html = "";
-    items.forEach((q, i) => {
-        html += `<div class="question"><p>${i+1}. ${q}</p><div class="scale">`;
-        for(let j = 0; j <= 3; j++) {
-            html += `<label><input type="radio" name="q${i}" value="${j}" required> ${j}<span>${responseLabels[j]}</span></label>`;
+    mcqiItems.forEach((q, i) => {
+        html += `<div class="question"><p><strong>Q${i+1}.</strong> ${q}</p><div class="scale">`;
+        for(let j = 1; j <= 6; j++) {
+            html += `<label><input type="radio" name="mcqi_${i}" value="${j}" required> ${j}<span>${mcqiLabels[j]}</span></label>`;
         }
         html += `</div></div>`;
     });
-    document.getElementById("questions").innerHTML = html;
+    document.getElementById("mcqi-questions").innerHTML = html;
 }
 
-// Call generateQuestions when page loads
-generateQuestions();
-
-// Function to reverse score a value (0->3, 1->2, 2->1, 3->0)
-function reverseScore(value) {
-    return 3 - parseInt(value);
+// Generate SCI questions
+function generateSCIQuestions() {
+    let html = `<table class="scale-table"><tr><th>Item</th><th colspan="5">Response Options</th></tr>`;
+    sciItems.forEach((item, i) => {
+        html += `<tr><td><strong>Q${i+1}.</strong> ${item.text}</td>`;
+        for(let j = 0; j < 5; j++) {
+            html += `<td class="response-cell"><label><input type="radio" name="sci_${i}" value="${j}" required> ${item.options[j]}</label></td>`;
+        }
+        html += `</tr>`;
+    });
+    html += `</table>`;
+    document.getElementById("sci-questions").innerHTML = html;
 }
 
-// Function to get string label for response value
-function getResponseLabel(value) {
-    return responseLabels[value] || "Unknown";
+// Generate DERS-16 questions
+function generateDERSQuestions() {
+    let html = "";
+    dersItems.forEach((q, i) => {
+        html += `<div class="question"><p><strong>Q${i+1}.</strong> ${q}</p><div class="scale">`;
+        for(let j = 1; j <= 5; j++) {
+            html += `<label><input type="radio" name="ders_${i}" value="${j}" required> ${j}<span>${dersLabels[j]}</span></label>`;
+        }
+        html += `</div></div>`;
+    });
+    document.getElementById("ders-questions").innerHTML = html;
 }
 
+// Generate all questions
+generateMCQIQuestions();
+generateSCIQuestions();
+generateDERSQuestions();
+
+// Reverse score for DERS
+function reverseDERS(value) {
+    return 6 - parseInt(value);
+}
+
+// Submit form
 async function submitForm() {
-    // Show loading overlay
-    document.getElementById("loading").style.display = "flex";
-    
-    // Disable submit button to prevent double submission
-    document.getElementById("submitBtn").disabled = true;
-    
-    // Hide any previous save status
-    const saveStatus = document.getElementById("saveStatus");
-    saveStatus.classList.add("hidden");
-    
-    // Generate anonymous participant ID
-    const participantID = generateParticipantID();
-    
-    // Check consent
-    const consentCheck = document.getElementById("consentCheck");
-    if (!consentCheck.checked) {
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("submitBtn").disabled = false;
-        document.getElementById("consentError").classList.remove("hidden");
+    // Validate all sections are complete
+    if (!validateSection(1) || !validateSection(2) || !validateSection(3)) {
+        alert("Please answer all questions before submitting.");
         return;
     }
     
-    // Validate demographics
+    document.getElementById("loading").style.display = "flex";
+    document.getElementById("submitBtn").disabled = true;
+    
+    const participantID = generateParticipantID();
+    
+    // Get demographics
     const sex = document.getElementById("sex").value;
     const age = document.getElementById("age").value;
     const area = document.getElementById("area").value;
@@ -397,70 +535,61 @@ async function submitForm() {
     const stream = document.getElementById("stream").value;
     const department = document.getElementById("department").value;
     
-    if (!sex || !age || !area || !education || !domicile || !stream || !department) {
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("submitBtn").disabled = false;
-        document.getElementById("status").innerHTML = '<span class="error">Please fill in all demographic fields</span>';
-        return;
+    // Collect MCQI-6 scores
+    let mcqiScores = [];
+    let mcqiTotal = 0;
+    for(let i = 0; i < 6; i++) {
+        let val = document.querySelector(`input[name="mcqi_${i}"]:checked`).value;
+        mcqiScores.push(parseInt(val));
+        mcqiTotal += parseInt(val);
     }
+    const mcqiMean = (mcqiTotal / 6).toFixed(2);
     
-    // Validate age range
-    if (age < 18 || age > 25) {
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("submitBtn").disabled = false;
-        document.getElementById("status").innerHTML = '<span class="error">Age must be between 18 and 25 years</span>';
-        return;
+    // Collect SCI scores (reverse scored - higher is better)
+    let sciScores = [];
+    let sciTotal = 0;
+    for(let i = 0; i < 8; i++) {
+        let val = document.querySelector(`input[name="sci_${i}"]:checked`).value;
+        let sciValue = 4 - parseInt(val); // Reverse: 0->4, 1->3, 2->2, 3->1, 4->0
+        sciScores.push(sciValue);
+        sciTotal += sciValue;
     }
+    const sciMean = (sciTotal / 8).toFixed(2);
     
-    // Validate all questions are answered
-    let allAnswered = true;
-    for(let i = 0; i < 10; i++) {
-        let val = document.querySelector('input[name="q' + i + '"]:checked');
-        if (!val) {
-            allAnswered = false;
-            break;
-        }
-    }
-    
-    if (!allAnswered) {
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("submitBtn").disabled = false;
-        document.getElementById("status").innerHTML = '<span class="error">Please answer all questions before submitting</span>';
-        return;
-    }
-    
-    // Collect raw scores
-    let rawScores = [];
-    for(let i = 0; i < 10; i++) {
-        let val = document.querySelector('input[name="q' + i + '"]:checked');
-        rawScores.push(parseInt(val.value));
-    }
-    
-    // Calculate scores for PDF (fast calculation)
-    let finalScores = [];
-    let totalScore = 0;
-    
-    for(let i = 0; i < 10; i++) {
-        if (reverseScoredItems.includes(i)) {
-            let reversedValue = reverseScore(rawScores[i]);
-            finalScores.push(reversedValue);
-            totalScore += reversedValue;
+    // Collect DERS-16 scores with reverse scoring for items 3 and 4
+    let dersRawScores = [];
+    let dersTotal = 0;
+    for(let i = 0; i < 16; i++) {
+        let val = document.querySelector(`input[name="ders_${i}"]:checked`).value;
+        let rawValue = parseInt(val);
+        dersRawScores.push(rawValue);
+        
+        if (dersReverseScored.includes(i)) {
+            dersTotal += reverseDERS(rawValue);
         } else {
-            finalScores.push(rawScores[i]);
-            totalScore += rawScores[i];
+            dersTotal += rawValue;
         }
     }
+    const dersMean = (dersTotal / 16).toFixed(2);
     
-    const meanScore = (totalScore / 10).toFixed(2);
+    // Interpretations
+    let mcqiInterpretation = mcqiTotal >= 24 ? "High metacognitive beliefs about sleep" : 
+                            mcqiTotal >= 18 ? "Moderate metacognitive beliefs about sleep" : 
+                            "Low metacognitive beliefs about sleep";
     
-    // Get attitude level and interpretation text based on new scoring
-    const attitudeLevel = getAttitudeLevel(totalScore);
-    const interpretationText = getInterpretationText(totalScore);
+    let sciInterpretation = sciTotal >= 16 ? "No clinically significant insomnia" :
+                           sciTotal >= 8 ? "Sub-threshold insomnia" :
+                           "Probable insomnia disorder";
     
-    // ===== SPREADSHEET DATA WITH INTERPRETATION RESULTS =====
+    let dersInterpretation = dersTotal >= 48 ? "Severe difficulties in emotion regulation" :
+                            dersTotal >= 35 ? "Moderate difficulties in emotion regulation" :
+                            "Minimal difficulties in emotion regulation";
+    
+    // Prepare data for Google Sheets with your research title
     let spreadsheetData = {
+        // Demographics
+        "Timestamp": new Date().toLocaleString(),
         "ParticipantID": participantID,
-        "Consent": "Yes",
         "Sex": sex,
         "Age": age,
         "Area": area,
@@ -468,74 +597,83 @@ async function submitForm() {
         "Domicile": domicile,
         "Stream": stream,
         "Department": department,
-        "Q1": rawScores[0],
-        "Q2": rawScores[1],
-        "Q3": rawScores[2],
-        "Q4": rawScores[3],
-        "Q5": rawScores[4],
-        "Q6": rawScores[5],
-        "Q7": rawScores[6],
-        "Q8": rawScores[7],
-        "Q9": rawScores[8],
-        "Q10": rawScores[9],
-        "Total_Score": totalScore,
-        "Mean_Score": meanScore,
-        "Attitude_Level": attitudeLevel,
-        "Interpretation": interpretationText,
-        "Timestamp": new Date().toISOString()
+        
+        // MCQI-6 Individual Items
+        "MCQI_1": mcqiScores[0],
+        "MCQI_2": mcqiScores[1],
+        "MCQI_3": mcqiScores[2],
+        "MCQI_4": mcqiScores[3],
+        "MCQI_5": mcqiScores[4],
+        "MCQI_6": mcqiScores[5],
+        "MCQI_Total": mcqiTotal,
+        "MCQI_Mean": mcqiMean,
+        "MCQI_Interpretation": mcqiInterpretation,
+        
+        // SCI Individual Items (reversed scores)
+        "SCI_1": sciScores[0],
+        "SCI_2": sciScores[1],
+        "SCI_3": sciScores[2],
+        "SCI_4": sciScores[3],
+        "SCI_5": sciScores[4],
+        "SCI_6": sciScores[5],
+        "SCI_7": sciScores[6],
+        "SCI_8": sciScores[7],
+        "SCI_Total": sciTotal,
+        "SCI_Mean": sciMean,
+        "SCI_Interpretation": sciInterpretation,
+        
+        // DERS-16 Raw Scores
+        "DERS_1": dersRawScores[0],
+        "DERS_2": dersRawScores[1],
+        "DERS_3": dersRawScores[2],
+        "DERS_4": dersRawScores[3],
+        "DERS_5": dersRawScores[4],
+        "DERS_6": dersRawScores[5],
+        "DERS_7": dersRawScores[6],
+        "DERS_8": dersRawScores[7],
+        "DERS_9": dersRawScores[8],
+        "DERS_10": dersRawScores[9],
+        "DERS_11": dersRawScores[10],
+        "DERS_12": dersRawScores[11],
+        "DERS_13": dersRawScores[12],
+        "DERS_14": dersRawScores[13],
+        "DERS_15": dersRawScores[14],
+        "DERS_16": dersRawScores[15],
+        "DERS_Total": dersTotal,
+        "DERS_Mean": dersMean,
+        "DERS_Interpretation": dersInterpretation
     };
     
-    // Save to localStorage as backup
-    saveToLocalBackup(spreadsheetData);
-    
-    try {
-        // ===== IMPROVED FETCH WITH PROPER ERROR HANDLING =====
-        // Remove 'no-cors' mode and add proper headers
-        const response = await fetch("https://script.google.com/macros/s/AKfycbwM0YQSglMyPu1Sg0LGllXhYr4FLGrvR3MnHQiw00IITNblyySg-QvgnzNK_4GbeP7Z/exec", {
-            method: "POST",
-            headers: { 
-                "Content-Type": "text/plain;charset=utf-8", // Changed to text/plain to avoid CORS preflight
-            },
-            body: JSON.stringify(spreadsheetData)
-        });
-        
-        // Check if response is OK
-        if (response.ok) {
-            saveStatus.innerHTML = '✓ Data successfully saved to spreadsheet';
-            saveStatus.className = 'save-status success';
-        } else {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-    } catch (error) {
-        console.error('Spreadsheet save error:', error);
-        
-        // Show warning but continue with PDF download
-        saveStatus.innerHTML = '⚠ Data saved locally but could not reach server. Your responses are backed up in your browser.';
-        saveStatus.className = 'save-status warning';
-    }
-    
-    // Show save status
-    saveStatus.classList.remove("hidden");
-    
-    // Create PDF immediately
-    createPDF(participantID, sex, age, area, education, domicile, stream, department, rawScores, totalScore, meanScore, attitudeLevel, interpretationText);
-    
-    // Hide loading and show success message
-    document.getElementById("loading").style.display = "none";
-    document.getElementById("status").innerHTML = '<span class="success">✓ PDF downloaded successfully! Thank you for your participation.</span>';
-    
-    // Disable all inputs to prevent changes after submission
-    document.querySelectorAll('input[type="radio"], select, input[type="number"]').forEach(el => {
-        el.disabled = true;
+    // Send to your Google Sheet
+    fetch("https://script.google.com/macros/s/AKfycbzB65D8oKnmeuUm4CScLOWPBajX8JhEMaMYEQL1aR7hUQMvB_QqPqtB3lPk4YZNHhlJ/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(spreadsheetData)
+    })
+    .then(() => {
+        console.log("Data sent to Google Sheets");
+        document.getElementById("saveStatus").innerHTML = "✓ Data saved to database";
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        document.getElementById("saveStatus").innerHTML = "⚠️ Data saved locally only";
     });
     
-    // Change button text
-    document.getElementById("submitBtn").innerHTML = "COMPLETED - Thank You";
-    document.getElementById("submitBtn").style.background = "#cccccc";
-    document.getElementById("submitBtn").style.cursor = "default";
+    // Create certificate PDF
+    createCertificatePDF(participantID, spreadsheetData);
+    
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("status").innerHTML = '<span class="success">✓ Certificate downloaded! Thank you for participating.</span>';
+    
+    // Disable all inputs
+    document.querySelectorAll('input[type="radio"], select, input[type="number"]').forEach(el => el.disabled = true);
+    document.getElementById("submitBtn").innerHTML = "✓ COMPLETED";
 }
 
-function createPDF(participantID, sex, age, area, education, domicile, stream, department, rawScores, totalScore, meanScore, attitudeLevel, interpretationText) {
+function createCertificatePDF(participantID, data) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({
         orientation: 'portrait',
@@ -543,12 +681,11 @@ function createPDF(participantID, sex, age, area, education, domicile, stream, d
         format: 'a4'
     });
     
-    // Set certificate style
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
-    let y = 15;
+    let y = 20;
     
-    // Decorative border
+    // Decorative border (certificate style)
     doc.setDrawColor(46, 125, 50);
     doc.setLineWidth(1);
     doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
@@ -557,195 +694,119 @@ function createPDF(participantID, sex, age, area, education, domicile, stream, d
     doc.setLineWidth(0.5);
     doc.rect(15, 15, pageWidth - 30, pageHeight - 30);
     
-    // Top margin line
+    // Top decorative line
     doc.setDrawColor(46, 125, 50);
     doc.setLineWidth(0.5);
     doc.line(20, 25, pageWidth - 20, 25);
     
-    // Ravenshaw University Name just below margin line
-    doc.setFontSize(20);
+    // University Header
+    doc.setFontSize(24);
     doc.setTextColor(46, 125, 50);
-    doc.text("RAVENSHAW UNIVERSITY", pageWidth/2, 32, { align: 'center' });
-    y = 40;
+    doc.text("RAVENSHAW UNIVERSITY", pageWidth/2, 35, { align: 'center' });
     
-    // Department
-    doc.setFontSize(12);
-    doc.setTextColor(0, 0, 0);
-    doc.text("Department of Psychology", pageWidth/2, y, { align: 'center' });
-    y += 5;
-    doc.setFontSize(9);
-    doc.text("Cuttack, Odisha - 753003", pageWidth/2, y, { align: 'center' });
-    y += 12;
-    
-    // Title
     doc.setFontSize(14);
-    doc.setTextColor(46, 125, 50);
-    doc.text("Attitudes Toward Seeking Professional Psychological Help", pageWidth/2, y, { align: 'center' });
-    y += 5;
-    doc.text("Scale - Short Form (ATSPPH-SF)", pageWidth/2, y, { align: 'center' });
-    y += 8;
-    
-    // Anonymous Participant ID
-    doc.setFontSize(11);
-    doc.setTextColor(100, 100, 100);
-    doc.text(`Participant ID: ${participantID} (Anonymous)`, pageWidth/2, y, { align: 'center' });
-    y += 10;
-    
-    // Demographics in one line
-    doc.setFontSize(9);
     doc.setTextColor(0, 0, 0);
-    doc.text(`Sex: ${sex}  |  Age: ${age}  |  Education: ${education}  |  Area: ${area}`, 20, y);
-    y += 5;
-    doc.text(`Domicile: ${domicile}  |  Stream: ${stream}  |  Dept: ${department}`, 20, y);
-    y += 5;
+    doc.text("Department of Psychology", pageWidth/2, 43, { align: 'center' });
+    doc.text("Cuttack, Odisha - 753003", pageWidth/2, 50, { align: 'center' });
     
-    // Timestamp
-    const date = new Date();
-    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-    doc.text(`Timestamp: ${formattedDate}`, 20, y);
-    y += 12;
+    // Research Title
+    doc.setFontSize(12);
+    doc.setTextColor(46, 125, 50);
+    doc.text("A Comparative Study of Sleep Metacognition and Sleep Quality", pageWidth/2, 62, { align: 'center' });
+    doc.text("Among Undergraduate and Postgraduate Students:", pageWidth/2, 68, { align: 'center' });
+    doc.text("The Mediating Role of Emotion Regulation", pageWidth/2, 74, { align: 'center' });
     
-    // Results Box
+    // Certificate of Participation
+    doc.setFontSize(16);
+    doc.setTextColor(46, 125, 50);
+    doc.text("CERTIFICATE OF PARTICIPATION", pageWidth/2, 85, { align: 'center' });
+    
+    // Participant ID
+    doc.setFontSize(12);
+    doc.setTextColor(100, 100, 100);
+    doc.text(`Participant ID: ${participantID} (Anonymous)`, pageWidth/2, 95, { align: 'center' });
+    
+    y = 105;
+    
+    // Demographics Box
     doc.setFillColor(245, 245, 245);
     doc.rect(20, y-5, pageWidth-40, 25, 'F');
-    doc.setFontSize(11);
-    doc.setTextColor(46, 125, 50);
-    doc.text("ATSPPH-SF RESULTS:", 25, y);
-    y += 5;
-    doc.setTextColor(0, 0, 0);
     doc.setFontSize(10);
-    doc.text(`Total Score: ${totalScore} / 30  |  Mean Score: ${meanScore} / 3.0`, 25, y);
-    y += 5;
-    doc.text(`Attitude: ${attitudeLevel}`, 25, y);
-    y += 5;
-    doc.setFontSize(8);
-    doc.text("(Higher scores = more favorable attitudes toward seeking professional help)", 25, y);
-    y += 12;
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Sex: ${data.Sex} | Age: ${data.Age} | Area: ${data.Area} | Education: ${data.Education}`, 25, y);
+    y += 6;
+    doc.text(`Domicile: ${data.Domicile} | Stream: ${data.Stream} | Department: ${data.Department}`, 25, y);
+    y += 6;
+    doc.text(`Date: ${new Date().toLocaleDateString()} | Time: ${new Date().toLocaleTimeString()}`, 25, y);
+    y += 15;
     
-    // Interpretation Box
+    // MCQI-6 Results
     doc.setFillColor(245, 245, 245);
     doc.rect(20, y-5, pageWidth-40, 20, 'F');
+    doc.setFontSize(12);
+    doc.setTextColor(46, 125, 50);
+    doc.text("MCQI-6: Metacognition about Sleep", 25, y);
+    y += 6;
     doc.setFontSize(10);
-    doc.setTextColor(46, 125, 50);
-    doc.text("INTERPRETATION:", 25, y);
-    y += 5;
     doc.setTextColor(0, 0, 0);
-    doc.setFontSize(9);
-    
-    // Split long interpretation text into multiple lines if needed
-    const splitInterpretation = doc.splitTextToSize(interpretationText, pageWidth - 60);
-    doc.text(splitInterpretation, 25, y);
-    y += (splitInterpretation.length * 4) + 8;
-    
-    // Individual Responses with STRING LABELS
-    doc.setFontSize(11);
-    doc.setTextColor(46, 125, 50);
-    doc.text("INDIVIDUAL RESPONSES:", 20, y);
-    y += 6;
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(8);
-    doc.text("Scale: 0=Disagree | 1=Partly Disagree | 2=Partly Agree | 3=Agree", 20, y);
+    doc.text(`Total Score: ${data.MCQI_Total}/36 | Mean: ${data.MCQI_Mean}/6`, 25, y);
     y += 5;
+    doc.text(`Interpretation: ${data.MCQI_Interpretation}`, 25, y);
+    y += 12;
     
-    // Two-column layout with boxed appearance
-    const leftCol = 25;
-    const rightCol = 120;
-    let col1Y = y;
-    let col2Y = y;
-    
-    const itemTexts = [
-        "Mental breakdown - get professional attention",
-        "Talking to psychologist is poor way",
-        "Serious crisis - confident in psychotherapy",
-        "Admirable to cope without help",
-        "Want help if worried/upset long time",
-        "Might want counseling in future",
-        "Emotional problem not solved alone",
-        "Psychotherapy doubtful value",
-        "Work out own problems - last resort",
-        "Emotional troubles work out alone"
-    ];
-    
-    for(let i = 0; i < 10; i++) {
-        const itemNum = i + 1;
-        const rawValue = rawScores[i];
-        const stringLabel = getResponseLabel(rawValue);
-        const isReversed = reverseScoredItems.includes(i);
-        const reverseIndicator = isReversed ? " (R)" : "";
-        
-        if (i < 5) {
-            doc.text(`Q${itemNum}: ${stringLabel}${reverseIndicator} - ${itemTexts[i]}`, leftCol, col1Y);
-            col1Y += 5;
-        } else {
-            doc.text(`Q${itemNum}: ${stringLabel}${reverseIndicator} - ${itemTexts[i]}`, rightCol, col2Y);
-            col2Y += 5;
-        }
-    }
-    
-    y = Math.max(col1Y, col2Y) + 8;
-    
-    // Reverse scoring note
-    doc.setFontSize(7);
-    doc.setTextColor(100, 100, 100);
-    doc.text("Note: Items marked (R) were reverse-scored (2,4,8,9,10): 0=3, 1=2, 2=1, 3=0", 20, y);
+    // SCI Results
+    doc.setFillColor(245, 245, 245);
+    doc.rect(20, y-5, pageWidth-40, 20, 'F');
+    doc.setFontSize(12);
+    doc.setTextColor(46, 125, 50);
+    doc.text("SCI: Sleep Condition Indicator", 25, y);
     y += 6;
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Total Score: ${data.SCI_Total}/32 | Mean: ${data.SCI_Mean}/4`, 25, y);
+    y += 5;
+    doc.text(`Interpretation: ${data.SCI_Interpretation}`, 25, y);
+    y += 12;
     
-    // Reference table at bottom
+    // DERS-16 Results
+    doc.setFillColor(245, 245, 245);
+    doc.rect(20, y-5, pageWidth-40, 20, 'F');
+    doc.setFontSize(12);
+    doc.setTextColor(46, 125, 50);
+    doc.text("DERS-16: Difficulties in Emotion Regulation", 25, y);
+    y += 6;
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Total Score: ${data.DERS_Total}/80 | Mean: ${data.DERS_Mean}/5`, 25, y);
+    y += 5;
+    doc.text(`Interpretation: ${data.DERS_Interpretation}`, 25, y);
+    y += 15;
+    
+    // Footer with interpretation guide
+    y = 240;
+    doc.setDrawColor(46, 125, 50);
+    doc.line(20, y, pageWidth-20, y);
+    y += 5;
     doc.setFontSize(8);
     doc.setTextColor(46, 125, 50);
     doc.text("INTERPRETATION GUIDE:", 20, y);
     y += 4;
     doc.setTextColor(100, 100, 100);
-    doc.text("0-10: Strongly negative attitudes | 11-20: Moderate attitudes | 21-30: Highly positive attitudes", 20, y);
-    y += 6;
+    doc.text("MCQI-6: <18=Low | 18-23=Moderate | ≥24=High", 20, y);
+    y += 4;
+    doc.text("SCI: ≥16=No insomnia | 8-15=Sub-threshold | <8=Probable insomnia", 20, y);
+    y += 4;
+    doc.text("DERS-16: <35=Minimal | 35-47=Moderate | ≥48=Severe difficulties", 20, y);
+    y += 8;
     
-    // Footer with EXACT references as requested
-    y = pageHeight - 30;
-    doc.setDrawColor(46, 125, 50);
-    doc.line(20, y-5, pageWidth-20, y-5);
+    // Copyright
     doc.setFontSize(8);
     doc.setTextColor(100, 100, 100);
-    doc.text("© 2025 Ravenshaw University, Department of Psychology. All rights reserved.", pageWidth/2, y, { align: 'center' });
-    y += 5;
-    doc.text("Reference: Fischer, E. H., & Farina, A. (1995). Attitudes toward seeking professional psychological help: A shortened form.", pageWidth/2, y, { align: 'center' });
-    y += 4;
-    doc.text("Journal of College Student Development, 36, 368-373.", pageWidth/2, y, { align: 'center' });
+    doc.text("© 2025 Ravenshaw University, Department of Psychology. All rights reserved.", pageWidth/2, 270, { align: 'center' });
+    doc.text("References: Lee et al. (2022); Espie et al. (2014); Bjureberg et al. (2016)", pageWidth/2, 275, { align: 'center' });
     
     // Save PDF
-    doc.save(`ATSPPH_${participantID}_Certificate.pdf`);
-}
-
-// Function to show survey after demographics are filled
-document.getElementById('sex').addEventListener('change', checkDemographics);
-document.getElementById('age').addEventListener('change', checkDemographics);
-document.getElementById('area').addEventListener('change', checkDemographics);
-document.getElementById('education').addEventListener('change', checkDemographics);
-document.getElementById('domicile').addEventListener('change', checkDemographics);
-document.getElementById('stream').addEventListener('change', checkDemographics);
-document.getElementById('department').addEventListener('input', checkDemographics);
-
-function checkDemographics() {
-    const consentCheck = document.getElementById("consentCheck");
-    if (!consentCheck.checked) return;
-    
-    const sex = document.getElementById("sex").value;
-    const age = document.getElementById("age").value;
-    const area = document.getElementById("area").value;
-    const education = document.getElementById("education").value;
-    const domicile = document.getElementById("domicile").value;
-    const stream = document.getElementById("stream").value;
-    const department = document.getElementById("department").value;
-    
-    if (sex && age && area && education && domicile && stream && department) {
-        if (age >= 18 && age <= 25) {
-            document.getElementById("surveySection").classList.remove("hidden");
-        }
-    }
-}
-
-// Optional: Function to retrieve local backups
-function getLocalBackups() {
-    return JSON.parse(localStorage.getItem('survey_backups') || '[]');
+    doc.save(`Ravenshaw_Sleep_Certificate_${participantID}.pdf`);
 }
 </script>
 </body>
